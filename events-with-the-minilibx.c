@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events-with-the-minilibx.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abrabant <abrabant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/10 19:56:59 by abrabant          #+#    #+#             */
+/*   Updated: 2021/02/10 19:57:03 by abrabant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <mlx.h>
@@ -6,6 +18,7 @@
 
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 300
+
 #define MLX_ERROR 1
 
 typedef struct s_data
