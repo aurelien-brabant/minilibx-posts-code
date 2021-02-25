@@ -6,7 +6,7 @@
 /*   By: abrabant <abrabant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 19:36:44 by abrabant          #+#    #+#             */
-/*   Updated: 2021/02/10 19:53:03 by abrabant         ###   ########.fr       */
+/*   Updated: 2021/02/25 21:09:24 by abrabant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_data
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	t_img	img[2];
+	t_img	img;
 	int		cur_img;
 }	t_data;
 
@@ -120,13 +120,11 @@ int	render(t_data *data)
 {
 	if (data->win_ptr == NULL)
 		return (1);
-	render_background(&data->img[1], WHITE_PIXEL);
-	render_rect(&data->img[1], (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
-	render_rect(&data->img[1], (t_rect){0, 0, 100, 100, RED_PIXEL});
+	render_background(&data->img, WHITE_PIXEL);
+	render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
+	render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
 
-	memcpy(data->img[0].addr, data->img[1].addr, data->img[1].line_len * WINDOW_HEIGHT);
-
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img[0].mlx_img, 0, 0);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 
 	return (0);
 }
@@ -146,14 +144,10 @@ int	main(void)
 	}
 
 	/* Setup hooks */ 
-	data.img[0].mlx_img = mlx_new_image(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	data.img[1].mlx_img = mlx_new_image(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	
-	data.img[0].addr = mlx_get_data_addr(data.img[0].mlx_img, &data.img[0].bpp,
-			&data.img[0].line_len, &data.img[0].endian);
-	data.img[1].addr = mlx_get_data_addr(data.img[1].mlx_img, &data.img[1].bpp,
-			&data.img[1].line_len, &data.img[1].endian);
-	data.cur_img = 0;
+	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
+			&data.img.line_len, &data.img.endian);
 
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
@@ -161,8 +155,7 @@ int	main(void)
 	mlx_loop(data.mlx_ptr);
 
 	/* we will exit the loop if there's no window left, and execute this code */
-	mlx_destroy_image(data.mlx_ptr, data.img[0].mlx_img);
-	mlx_destroy_image(data.mlx_ptr, data.img[1].mlx_img);
+	mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
 	mlx_destroy_display(data.mlx_ptr);
 	free(data.mlx_ptr);
 }
